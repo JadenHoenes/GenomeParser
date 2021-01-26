@@ -11,51 +11,24 @@ class Genome:
 
   def genes(self):
     genes = self.editSequence
-    while len(genes)>3:
-      position = genes.find('ATG')
-      printed = False
-      if position == -1:
-        genes = ''
-        if not printed:
-          print('no gene found')
-      else:
-        tempList = list(genes)
-        del tempList[0:position+3]
-        geneFound = True
-        while geneFound:
-          list3 = ''.join(tempList[0:3])
-          genes = ''.join(tempList)
-          if len(list3) > 2 and list3 != 'TAA' and list3 != 'TAG' and list3 != 'TGA':
-            if endCheck('TAA',list3,genes) or endCheck('TGA',list3,genes) or endCheck('TAG',list3,genes):
-              endings = ['TAA','TAG','TGA']
-              for i in range(3):
-                if endCheck(endings[i],''.join(tempList[1:3]),genes) or endCheck(endings[i],''.join(tempList[2:4]),genes):
-                  del tempList[0:genes.find(endings[i])]
-                else:
-                  print(list3)
-                  del tempList[0:3]
-              if genes.find('ATG') != -1:
-                del tempList[0:genes.find('ATG')]
-              else:
-                tempList = []
-                genes = ''
-                list3 = ''
-              list3 = ''.join(tempList[0:3])
-              print(list3, end='')
-              del tempList[0:3]
-              printed = True
-          else:
-            del tempList[0:genes.find('ATG')+3]
-            geneFound = False
-            print()
-            genes = ''.join(tempList)
-            
+    if genes.find('ATG') == -1:
+      print('no gene found')
+    else:
+      split=genes.split('ATG')
+      endings = ['TAA','TGA','TAG']
+      for j in endings:
+        for i in split:
+          if len(i) < 3:
+            split.remove(i)
+        for i in range(len(split)):
+          if split[i].find(j)!=-1:
+            split[i] = split[i][0:split[i].find(j)]
+      for i in split:
+        print(i)
 
 def determineChar(inputVal):
   if inputVal != 'A' and inputVal != 'C' and inputVal != 'T' and inputVal != 'G':
     return True
-def endCheck(ending, string, genes):
-  return genes.find(ending) > genes.find(string)
 
 def main():
 
